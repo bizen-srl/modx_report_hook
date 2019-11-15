@@ -1,0 +1,27 @@
+<?php
+/*
+* BIZEN - FormIt - dynamic generated report email
+* @author: Massimiliano Monaro 2018
+*/
+
+$modx->log(xPDO::LOG_LEVEL_INFO, 'Launching reportHook.');
+$form_fields = $hook->getValues();
+
+$fields_content = NULL;
+
+if($form_fields) {
+    foreach($form_fields as $form_field_key => $form_field_value){
+        if($form_field_key != 'savedForm'){
+	        if(is_array($form_field_value)) {
+		        $field_value = implode(',', $form_field_value);
+	        } else {
+	  	        $field_value = $form_field_value;
+	        }	  
+	        $form_field_key = str_replace(array('_','-'), array(' ', ' '), $form_field_key);
+	        $fields_content .= '<strong>' . $form_field_key . '</strong>: ' . $field_value . '<br>';
+        }
+    }
+}
+
+$hook->setValue('fields_report_html', $fields_content);
+return true;
